@@ -1,0 +1,56 @@
+---
+title: "Spotify Songs Analysis"
+author: "Azim Abdul Wahid, Moses Jung, and Peter Yim"
+output: html_document
+---
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+library("knitr")
+knitr::opts_chunk$set(echo = TRUE)
+source("scripts/summary-information.R")
+source("scripts/summary-table.R")
+source("charts/first_chart.R")
+source("charts/second_chart.R")
+source("charts/third_chart.R")
+```
+## Introduction
+
+Music is something that everyone can relate to, it is a universal topic of interest because just about everyone enjoys listening to music. Music is also a very diverse field, with many different genres and subgenres of types of songs. Moreover, Spotify provides us with a large and up-to-date API that we can use to answer many data-driven questions relevant to music like how the danceability of the song affects its popularity. We can compare countries' top 50 songs track properties like danceability, valence, and speechiness with each other to see if there are any similiarities or differences. We can also count the number of songs that are in a certain key and further discriminate songs by whether they are explicit or not. 
+## Summary of the Top 50 Songs
+
+In order to visualize the valence and speechiness between regions and answer how danceability affects popularity, we would need information like the average valence, speechiness, danceability and the most and least popular songs of the interested region's top 50 songs. Looking at the global top 50, the most popular song is **`r spotify_summary$most_popular_track`** and the least popular being **`r spotify_summary$least_popular_track`**. The top 50's average valence, speechiness, and danceability are **`r spotify_summary$avg_valence`**, **`r spotify_summary$avg_speechiness`**, and **`r spotify_summary$avg_danceability`** respectively.  
+
+## Table of the Top 50 Songs' Properties 
+
+A table of top 50 songs is grouped by track name to describe the properties of each individual track, giving us greater insight on how the tracks compare against one another. The table is sorted by popularity to display the top 50 songs in order. Information from the table helps us answer whether danceability affect track popularity. The most popular song has a danceability of **`r spotify_summary$most_pop_danceability`** and the least popular song('s) has a danceability of **`r spotify_summary$least_pop_danceability`**. The table shows that danceability varies very little between the two songs and this supports the idea that danceability has nothing to do with a song's popularity and also because it seem like every danceability score between the most and least popular songs seem random! 
+
+```{r table, echo = FALSE}
+kable(top_50_data, col.names = c("Song Name", "Popularity", "Loudness",
+                                 "Danceability", "Chromatic Key", "Energy",
+                                 "Valence", "Speechiness", "Explicit?",
+                                 "Tempo", "Track Lengh in Sec"))
+```
+
+## Visualizations of Song Analysis 
+
+### Does Danceability Affect Track Popularity? 
+This scatterplot aims to answer whether danceability affect track popularity. We used a scatterplot because we wanted to see whether there was a correlation between danceability and popularity. Track popularity ranges from 0 - 100 with 100 being the most popular. The scatterplot shows a weak correlation between danceability and popularity. Popularity is mostly random with respect to danceability although we can see *roughly* that most of the popular songs have a high danceability of above a 0.65.
+
+```{r get_chart1, echo = FALSE}
+get_chart1(top_50_data)
+```
+
+### Comparing Valence With One Another
+This histogram displays the valence of each song within the top 5 and a histogram allows for easy visual comparison of each song. Out of the top 5 songs, Soltera - Remix has the highest valence with a valence of 0.8 and Verte Ir has the lowest valence with a score of 0.553.
+
+```{r get_chart2, message=FALSE, echo = FALSE}
+get_chart2(top_5(top_50_data))
+```
+
+### Count of Songs That Are Explicit and In a Certain Key
+This bar graph shows the number of songs within the top 50 that are arranged by what key the song is in and the number of songs within each key is counted. We used a bar graph because we wanted to compare song count between the categories (different keys). There is further segregation within each key by counting whether the songs are also explicit or not. The bar graph describes that most popular key for a top 50 song to be made in is B and C# with 7 songs in each key. Out of the songs in B and C#, 4 out of the 7 songs in each key are not explicit. We can see that out of the 50 songs, 32 of them are not explicit and only 18 are explicit. 
+
+```{r get_chart3, echo = FALSE}
+get_chart3(top_50_data)
+```
+
